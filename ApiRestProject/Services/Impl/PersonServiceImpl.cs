@@ -1,63 +1,83 @@
 using ApiRestProject.Model;
+using ApiRestProject.Model.Context;
 
 namespace ApiRestProject.Services.Impl;
 
 public class PersonServiceImpl : IPersonService
 {
-  private volatile int count;
+  private MySQLContext _context;
+
+  public PersonServiceImpl(MySQLContext context)
+  {
+    _context = context;
+  }
 
   public Person Create(Person person)
   {
+    try
+    {
+      _context.Add(person);
+      _context.SaveChanges();
+    }
+    catch (Exception)
+    {
+
+      throw;
+    }
     return person;
   }
 
   public void Delete(long id)
   {
-    
+    var result = _context.People.SingleOrDefault(p => p.Id.Equals(id));
+    if (result != null)
+    {
+      try
+      {
+        _context.People.Remove(result);
+        _context.SaveChanges();
+      }
+      catch (Exception)
+      {
+
+        throw;
+      }
+    }
   }
 
   public List<Person> findAll()
   {
-    List<Person> peaple = new List<Person>();
-    for (int i = 0; i < 8; i++)
-    {
-      Person person = MockPerson(i);
-      peaple.Add(person);
-    }
-    return peaple;
+    return _context.People.ToList();
   }
 
   public Person FindById(long id)
   {
-    return new Person
-    {
-      Id = IncrementAndGet(),
-      FirstName = "Marcello",
-      LastName = "Joaquim",
-      Adress = "Rua capitão, Jaboatão, PE",
-      Gender = "Male"
-    };
+    return _context.People.SingleOrDefault(p => p.Id.Equals(id));
   }
 
   public Person Update(Person person)
   {
+    if (!Exists(person.Id)) return new Person();
+
+    var result = _context.People.SingleOrDefault(p => p.Id.Equals(person.Id));
+    if (result != null)
+    {
+      try
+      {
+        _context.Entry(result).CurrentValues.SetValues(person);
+        _context.SaveChanges();
+      }
+      catch (Exception)
+      {
+
+        throw;
+      }
+    }
     return person;
   }
 
-  private Person MockPerson(int i)
+  private bool Exists(long id)
   {
-    return new Person
-    {
-      Id = IncrementAndGet(),
-      FirstName = "Marcello "+i,
-      LastName = "Joaquim "+i,
-      Adress = $"Rua capitão {i}, Jaboatão, PE",
-      Gender = "Male"
-    };
-  }
-
-  private long IncrementAndGet()
-  {
-    return Interlocked.Increment(ref count);
+    return _context.People.Any(p => p.Id.Equals(id));
   }
 }
