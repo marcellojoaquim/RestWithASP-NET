@@ -1,6 +1,8 @@
+using ApiRestProject.Business;
+using ApiRestProject.Business.Impl;
 using ApiRestProject.Model.Context;
-using ApiRestProject.Services;
-using ApiRestProject.Services.Impl;
+using ApiRestProject.Repository;
+using ApiRestProject.Repository.Impl;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +17,8 @@ builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
 
 builder.Services.AddApiVersioning();
 //Injecao de dependencia
-builder.Services.AddScoped<IPersonService, PersonServiceImpl>();
+builder.Services.AddScoped<IPersonBusiness, PersonBusinessImpl>();
+builder.Services.AddScoped<IPersonRepository, PersonRepositoryImpl>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

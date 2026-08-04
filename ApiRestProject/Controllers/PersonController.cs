@@ -1,5 +1,5 @@
 using ApiRestProject.Model;
-using ApiRestProject.Services;
+using ApiRestProject.Business;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +12,12 @@ public class PersonController : ControllerBase
 {
 
     private readonly ILogger<PersonController> _logger;
-    private IPersonService _personService;
+    private IPersonBusiness _personBusiness;
 
-    public PersonController(ILogger<PersonController> logger, IPersonService personService)
+    public PersonController(ILogger<PersonController> logger, IPersonBusiness personBusiness)
     {
         _logger = logger;
-        _personService = personService;
+        _personBusiness = personBusiness;
     }
 
     [HttpGet]
@@ -25,7 +25,7 @@ public class PersonController : ControllerBase
     {
         _logger.LogInformation("Chamando FindAll()");
         
-        return Ok(_personService.findAll());
+        return Ok(_personBusiness.findAll());
     }
 
     [HttpGet("{id}")]
@@ -33,7 +33,7 @@ public class PersonController : ControllerBase
     {
         _logger.LogInformation("Chamando FindById()");
 
-        var person = _personService.FindById(id);
+        var person = _personBusiness.FindById(id);
         if(person == null)
         {
             return NotFound();
@@ -50,7 +50,7 @@ public class PersonController : ControllerBase
         {
             return BadRequest();
         }
-        return Ok(_personService.Create(person));
+        return Ok(_personBusiness.Create(person));
     }
 
     [HttpPut]
@@ -62,7 +62,7 @@ public class PersonController : ControllerBase
         {
             return BadRequest();
         }
-        return Ok(_personService.Update(person));
+        return Ok(_personBusiness.Update(person));
     }
 
     [HttpDelete("{id}")]
@@ -70,7 +70,7 @@ public class PersonController : ControllerBase
     {
         _logger.LogInformation("Chamando Delete()");
 
-        _personService.Delete(id);
+        _personBusiness.Delete(id);
         
         return NoContent();
     }

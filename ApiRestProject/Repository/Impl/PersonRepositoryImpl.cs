@@ -1,13 +1,13 @@
 using ApiRestProject.Model;
 using ApiRestProject.Model.Context;
 
-namespace ApiRestProject.Services.Impl;
+namespace ApiRestProject.Repository.Impl;
 
-public class PersonServiceImpl : IPersonService
+public class PersonRepositoryImpl : IPersonRepository
 {
   private MySQLContext _context;
 
-  public PersonServiceImpl(MySQLContext context)
+  public PersonRepositoryImpl(MySQLContext context)
   {
     _context = context;
   }
@@ -76,8 +76,9 @@ public class PersonServiceImpl : IPersonService
     return person;
   }
 
-  private bool Exists(long id)
+  public bool Exists(long id)
   {
     return _context.People.Any(p => p.Id.Equals(id));
   }
+
 }
