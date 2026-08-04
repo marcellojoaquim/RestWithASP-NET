@@ -1,11 +1,13 @@
 using ApiRestProject.Model;
 using ApiRestProject.Services;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiRestProject.Controllers;
 
+[ApiVersion("1")]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[controller]/v{version:apiVersion}")]
 public class PersonController : ControllerBase
 {
 

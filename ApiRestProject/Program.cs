@@ -10,7 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
-builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 46))));
+builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
+    connection, new MySqlServerVersion(new Version(8, 0, 46))));
+
+builder.Services.AddApiVersioning();
 //Injecao de dependencia
 builder.Services.AddScoped<IPersonService, PersonServiceImpl>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
