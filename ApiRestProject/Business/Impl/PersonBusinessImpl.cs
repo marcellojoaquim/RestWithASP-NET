@@ -1,5 +1,4 @@
 using ApiRestProject.Model;
-using ApiRestProject.Model.Context;
 using ApiRestProject.Repository;
 
 namespace ApiRestProject.Business.Impl;
