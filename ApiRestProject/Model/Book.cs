@@ -17,7 +17,7 @@ public class Book
 
   [Column("launch_date")]
   [Required(ErrorMessage ="LaunchDate é obrigatório")]
-  public string LaunchDate {get; set;}
+  public DateOnly LaunchDate {get; set;}
 
   [Column("price")]
   [Required(ErrorMessage ="Price é obrigatório")]
