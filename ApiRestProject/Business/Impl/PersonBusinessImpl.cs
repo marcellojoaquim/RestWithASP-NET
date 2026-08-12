@@ -1,13 +1,14 @@
 using ApiRestProject.Model;
 using ApiRestProject.Repository;
+using ApiRestProject.Repository.Generic;
 
 namespace ApiRestProject.Business.Impl;
 
 public class PersonBusinessImpl : IPersonBusiness
 {
-  private readonly IPersonRepository _personRepository;
+  private readonly IRepository<Person> _personRepository;
 
-  public PersonBusinessImpl(IPersonRepository personRepository)
+  public PersonBusinessImpl(IRepository<Person> personRepository)
   {
     _personRepository = personRepository;
   }

@@ -1,15 +1,13 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ApiRestProject.Model.Base;
 
 namespace ApiRestProject.Model;
 
 [Table("person")]
-public class Person
+public class Person : BaseEntity
 {
-
-  [Column("id")]
-  public long Id {get; set;}
 
   [Column("firstName")]
   [Required(ErrorMessage ="FirstName é obrigatório")]
