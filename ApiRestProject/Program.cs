@@ -2,6 +2,7 @@ using ApiRestProject.Business;
 using ApiRestProject.Business.Impl;
 using ApiRestProject.Model.Context;
 using ApiRestProject.Repository;
+using ApiRestProject.Repository.Generic;
 using ApiRestProject.Repository.Impl;
 using EvolveDb;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ builder.Services.AddScoped<IPersonRepository, PersonRepositoryImpl>();
 
 builder.Services.AddScoped<IBookBusiness, BookBusinessImpl>();
 builder.Services.AddScoped<IBookRepository, BookRepositoryImpl>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

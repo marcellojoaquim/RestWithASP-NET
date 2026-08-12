@@ -1,15 +1,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ApiRestProject.Model.Base;
 
 namespace ApiRestProject.Model;
 
 [Table("books")]
-public class Book
+public class Book: BaseEntity
 {
   
-  [Column("id")]
-  public long Id {get; set;}
 
   [Column("author")]
   [Required(ErrorMessage ="Author é obrigatório")]

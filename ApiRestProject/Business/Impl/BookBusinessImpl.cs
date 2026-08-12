@@ -1,13 +1,14 @@
 using ApiRestProject.Model;
 using ApiRestProject.Repository;
+using ApiRestProject.Repository.Generic;
 
 namespace ApiRestProject.Business.Impl;
 
 public class BookBusinessImpl : IBookBusiness
 {
-  private readonly IBookRepository _bookRepository;
+  private readonly IRepository<Book> _bookRepository;
 
-  public BookBusinessImpl(IBookRepository bookRepository)
+  public BookBusinessImpl(IRepository<Book> bookRepository)
   {
     _bookRepository = bookRepository;
   }
