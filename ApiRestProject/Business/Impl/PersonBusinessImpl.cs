@@ -1,5 +1,6 @@
+using ApiRestProject.Data.Converter.Impl;
+using ApiRestProject.Data.VO;
 using ApiRestProject.Model;
-using ApiRestProject.Repository;
 using ApiRestProject.Repository.Generic;
 
 namespace ApiRestProject.Business.Impl;
@@ -7,15 +8,19 @@ namespace ApiRestProject.Business.Impl;
 public class PersonBusinessImpl : IPersonBusiness
 {
   private readonly IRepository<Person> _personRepository;
+  private readonly PersonConverter _converter;
 
   public PersonBusinessImpl(IRepository<Person> personRepository)
   {
     _personRepository = personRepository;
+    _converter = new PersonConverter();
   }
 
-  public Person Create(Person person)
+  public PersonVO Create(PersonVO personVO)
   {
-    return _personRepository.Create(person);
+    var p = _converter.Parse(personVO);
+    p =_personRepository.Create(p);
+    return _converter.Parse(p);
   }
 
   public void Delete(long id)
@@ -23,18 +28,20 @@ public class PersonBusinessImpl : IPersonBusiness
     _personRepository.Delete(id);
   }
 
-  public List<Person> findAll()
+  public List<PersonVO> findAll()
   {
-    return _personRepository.findAll();
+    return _converter.Parse(_personRepository.findAll());
   }
 
-  public Person FindById(long id)
+  public PersonVO FindById(long id)
   {
-    return _personRepository.FindById(id);
+    return _converter.Parse(_personRepository.FindById(id));
   }
 
-  public Person Update(Person person)
+  public PersonVO Update(PersonVO personVO)
   {
-    return _personRepository.Update(person);
+    var p = _converter.Parse(personVO);
+    p =_personRepository.Update(p);
+    return _converter.Parse(p);
   }
 }

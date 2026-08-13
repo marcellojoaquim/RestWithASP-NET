@@ -2,6 +2,7 @@ using ApiRestProject.Model;
 using ApiRestProject.Business;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using ApiRestProject.Data.VO;
 
 namespace ApiRestProject.Controllers;
 
@@ -42,7 +43,7 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] Person person)
+    public IActionResult Post([FromBody] PersonVO person)
     {
         _logger.LogInformation("Chamando Create()");
 
@@ -54,7 +55,7 @@ public class PersonController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Put([FromBody] Person person)
+    public IActionResult Put([FromBody] PersonVO person)
     {
         _logger.LogInformation("Chamando Update()");
 
