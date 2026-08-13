@@ -1,12 +1,12 @@
-using ApiRestProject.Model;
+using ApiRestProject.Data.VO;
 
 namespace ApiRestProject.Business;
 
 public interface IBookBusiness
 {
-  Book Create(Book boook);
-  Book FindById(long id);
-  List<Book> findAll();
-  Book Update(Book book);
+  BookVO Create(BookVO boook);
+  BookVO FindById(long id);
+  List<BookVO> findAll();
+  BookVO Update(BookVO book);
   void Delete(long id);
 }

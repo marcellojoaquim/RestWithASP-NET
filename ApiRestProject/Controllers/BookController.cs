@@ -2,6 +2,7 @@ using ApiRestProject.Model;
 using ApiRestProject.Business;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using ApiRestProject.Data.VO;
 
 namespace ApiRestProject.Controllers;
 
@@ -42,7 +43,7 @@ public class BookController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] Book book)
+    public IActionResult Post([FromBody] BookVO book)
     {
         _logger.LogInformation("Chamando Create() book");
 
@@ -54,7 +55,7 @@ public class BookController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Put([FromBody] Book book)
+    public IActionResult Put([FromBody] BookVO book)
     {
         _logger.LogInformation("Chamando Update() book");
 

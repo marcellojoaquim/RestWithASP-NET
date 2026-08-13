@@ -1,5 +1,6 @@
+using ApiRestProject.Data.Converter.Impl;
+using ApiRestProject.Data.VO;
 using ApiRestProject.Model;
-using ApiRestProject.Repository;
 using ApiRestProject.Repository.Generic;
 
 namespace ApiRestProject.Business.Impl;
@@ -7,15 +8,19 @@ namespace ApiRestProject.Business.Impl;
 public class BookBusinessImpl : IBookBusiness
 {
   private readonly IRepository<Book> _bookRepository;
+  private readonly BookConverter _converter;
 
   public BookBusinessImpl(IRepository<Book> bookRepository)
   {
     _bookRepository = bookRepository;
+    _converter = new BookConverter();
   }
 
-  public Book Create(Book book)
+  public BookVO Create(BookVO bookVO)
   {
-    return _bookRepository.Create(book);
+    var bookEntity = _converter.Parse(bookVO);
+    bookEntity = _bookRepository.Create(bookEntity);
+    return _converter.Parse(bookEntity);
   }
 
   public void Delete(long id)
@@ -23,18 +28,21 @@ public class BookBusinessImpl : IBookBusiness
     _bookRepository.Delete(id);
   }
 
-  public List<Book> findAll()
+  public List<BookVO> findAll()
   {
-    return _bookRepository.findAll();
+
+    return _converter.Parse(_bookRepository.findAll());
   }
 
-  public Book FindById(long id)
+  public BookVO FindById(long id)
   {
-    return _bookRepository.FindById(id);
+    return _converter.Parse(_bookRepository.FindById(id));
   }
 
-  public Book Update(Book book)
+  public BookVO Update(BookVO bookVO)
   {
-    return _bookRepository.Update(book);
+    var bookEntity = _converter.Parse(bookVO);
+    bookEntity = _bookRepository.Update(bookEntity);
+    return _converter.Parse(bookEntity);
   }
 }
