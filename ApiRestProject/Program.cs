@@ -1,8 +1,10 @@
+using System.Net.Http.Headers;
 using ApiRestProject.Business;
 using ApiRestProject.Business.Impl;
 using ApiRestProject.Model.Context;
 using ApiRestProject.Repository.Generic;
 using EvolveDb;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using Serilog;
@@ -29,6 +31,14 @@ builder.Services.AddScoped<IPersonBusiness, PersonBusinessImpl>();
 
 builder.Services.AddScoped<IBookBusiness, BookBusinessImpl>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+builder.Services.AddMvc(options =>
+{
+  options.RespectBrowserAcceptHeader = true;
+  options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
+  options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/json");
+})
+.AddXmlSerializerFormatters();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

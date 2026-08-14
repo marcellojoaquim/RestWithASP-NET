@@ -1,4 +1,3 @@
-using ApiRestProject.Model;
 using ApiRestProject.Business;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
