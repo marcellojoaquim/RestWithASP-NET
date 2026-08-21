@@ -7,7 +7,9 @@ using ApiRestProject.Model.Context;
 using ApiRestProject.Repository.Generic;
 using EvolveDb;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using Serilog;
 
@@ -50,7 +52,21 @@ builder.Services.AddSingleton(filterOptions);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c=>
+{
+  c.SwaggerDoc( "v1", 
+  new OpenApiInfo
+  {
+    Title = "Rest API",
+    Description = "Curso DotNet - Construindo Restful API's",
+    Contact = new OpenApiContact
+    {
+      Name = "Marcello",
+      Email = "",
+      Url = new Uri("https://github.com/marcellojoaquim/")
+    }
+  });
+});
 
 var app = builder.Build();
 
@@ -58,8 +74,15 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+      c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso DotNet - Construindo Restful API's");
+    });
 }
+
+var option = new RewriteOptions();
+option.AddRedirect("^$", "swagger");
+app.UseRewriter(option);
 
 app.UseHttpsRedirection();
 
