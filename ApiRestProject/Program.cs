@@ -1,6 +1,8 @@
 using System.Net.Http.Headers;
 using ApiRestProject.Business;
 using ApiRestProject.Business.Impl;
+using ApiRestProject.Hypermedia.Enricher;
+using ApiRestProject.Hypermedia.Filters;
 using ApiRestProject.Model.Context;
 using ApiRestProject.Repository.Generic;
 using EvolveDb;
@@ -24,6 +26,11 @@ if (builder.Environment.IsDevelopment())
 {
     MigrateDatabase(connection);
 }
+
+var filterOptions = new HyperMediaFilterOptions();
+filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+
+builder.Services.AddSingleton(filterOptions);
 
 builder.Services.AddApiVersioning();
 //Injecao de dependencia
@@ -53,6 +60,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseEndpoints (endpoints =>
+{
+  endpoints.MapControllerRoute("DefaultApi", "{controller=values}/{id?}");
+});
 
 app.UseHttpsRedirection();
 

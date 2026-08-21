@@ -1,6 +1,9 @@
+using ApiRestProject.Hypermedia;
+using ApiRestProject.Hypermedia.Abstract;
+
 namespace ApiRestProject.Data.VO;
 
-public class PersonVO
+public class PersonVO : ISupportsHypermedia
 {
 
   public long Id {get; set;}
@@ -11,5 +14,5 @@ public class PersonVO
   public string Adress {get; set;}
 
   public string Gender {get; set;}
-
+  public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
 }

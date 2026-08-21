@@ -1,6 +1,6 @@
 namespace ApiRestProject.Hypermedia.Abstract;
 
-public interface ISuportHypermedia
+public interface ISupportsHypermedia
 {
   List<HyperMediaLink> Links {get; set;} 
 }

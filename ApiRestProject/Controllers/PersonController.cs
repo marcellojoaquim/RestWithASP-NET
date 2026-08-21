@@ -3,6 +3,7 @@ using ApiRestProject.Business;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using ApiRestProject.Data.VO;
+using ApiRestProject.Hypermedia.Filters;
 
 namespace ApiRestProject.Controllers;
 
@@ -22,6 +23,7 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet]
+    [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Get()
     {
         _logger.LogInformation("Chamando FindAll()");
@@ -30,6 +32,7 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Get(long id)
     {
         _logger.LogInformation("Chamando FindById()");
@@ -43,6 +46,7 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost]
+    [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Post([FromBody] PersonVO person)
     {
         _logger.LogInformation("Chamando Create()");
@@ -55,6 +59,7 @@ public class PersonController : ControllerBase
     }
 
     [HttpPut]
+    [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Put([FromBody] PersonVO person)
     {
         _logger.LogInformation("Chamando Update()");
