@@ -2,6 +2,7 @@ using ApiRestProject.Business;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using ApiRestProject.Data.VO;
+using ApiRestProject.Hypermedia.Filters;
 
 namespace ApiRestProject.Controllers;
 
@@ -21,6 +22,7 @@ public class BookController : ControllerBase
     }
 
     [HttpGet]
+    [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Get()
     {
         _logger.LogInformation("Chamando FindAll() books");
@@ -29,6 +31,7 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Get(long id)
     {
         _logger.LogInformation("Chamando FindById() book");
@@ -42,6 +45,7 @@ public class BookController : ControllerBase
     }
 
     [HttpPost]
+    [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Post([FromBody] BookVO book)
     {
         _logger.LogInformation("Chamando Create() book");
@@ -54,6 +58,7 @@ public class BookController : ControllerBase
     }
 
     [HttpPut]
+    [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Put([FromBody] BookVO book)
     {
         _logger.LogInformation("Chamando Update() book");

@@ -13,7 +13,7 @@ public class HyperMediaLink
       lock (_lock)
       {
         StringBuilder stringBuilder = new StringBuilder(href);
-        return stringBuilder.Replace("%2f", "/").ToString();
+        return stringBuilder.Replace("%2F", "/").ToString();
       } 
     }
     set {href = value;}

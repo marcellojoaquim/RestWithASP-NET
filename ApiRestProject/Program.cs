@@ -27,11 +27,6 @@ if (builder.Environment.IsDevelopment())
     MigrateDatabase(connection);
 }
 
-var filterOptions = new HyperMediaFilterOptions();
-filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
-
-builder.Services.AddSingleton(filterOptions);
-
 builder.Services.AddApiVersioning();
 //Injecao de dependencia
 builder.Services.AddScoped<IPersonBusiness, PersonBusinessImpl>();
@@ -47,6 +42,11 @@ builder.Services.AddMvc(options =>
 })
 .AddXmlSerializerFormatters();
 
+var filterOptions = new HyperMediaFilterOptions();
+filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
+
+builder.Services.AddSingleton(filterOptions);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -60,16 +60,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseEndpoints (endpoints =>
-{
-  endpoints.MapControllerRoute("DefaultApi", "{controller=values}/{id?}");
-});
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapControllerRoute("DefaultApi", "{controller=values}/v{version=apiVersion}/{id?}");
 
 app.Run();
 

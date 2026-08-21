@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiRestProject.Hypermedia.Enricher;
 
-public class PersonEnricher : ContentResponseEnricher<PersonVO>
+public class BookEnricher : ContentResponseEnricher<BookVO>
 {
-  protected override Task EnrichModel(PersonVO content, IUrlHelper urlHelper)
+  protected override Task EnrichModel(BookVO content, IUrlHelper urlHelper)
   {
-    var path = "api/persons";
+    var path = "api/book";
     string link = GetLink(content.Id, urlHelper, path);
 
     content.Links.Add(new HyperMediaLink()
