@@ -22,6 +22,9 @@ public class BookController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(200, Type = typeof(List<BookVO>))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
     [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Get()
     {
@@ -31,6 +34,9 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(200, Type = typeof(BookVO))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
     [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Get(long id)
     {
@@ -45,6 +51,9 @@ public class BookController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(201, Type = typeof(BookVO))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
     [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Post([FromBody] BookVO book)
     {
@@ -58,6 +67,10 @@ public class BookController : ControllerBase
     }
 
     [HttpPut]
+    [ProducesResponseType(200, Type = typeof(BookVO))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
     [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Put([FromBody] BookVO book)
     {
@@ -71,6 +84,10 @@ public class BookController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
     public IActionResult Delete(long id)
     {
         _logger.LogInformation("Chamando Delete() book");

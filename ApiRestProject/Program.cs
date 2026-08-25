@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using ApiRestProject.Business;
 using ApiRestProject.Business.Impl;
 using ApiRestProject.Hypermedia.Enricher;
@@ -6,7 +5,6 @@ using ApiRestProject.Hypermedia.Filters;
 using ApiRestProject.Model.Context;
 using ApiRestProject.Repository.Generic;
 using EvolveDb;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -16,6 +14,17 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
+builder.Services.AddCors(options =>
+{
+  options.AddDefaultPolicy(builder =>
+  {
+    builder.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+  });
+});
 
 builder.Services.AddControllers();
 
@@ -26,7 +35,7 @@ builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
 
 if (builder.Environment.IsDevelopment())
 {
-    MigrateDatabase(connection);
+  MigrateDatabase(connection);
 }
 
 builder.Services.AddApiVersioning();
@@ -52,9 +61,9 @@ builder.Services.AddSingleton(filterOptions);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c=>
+builder.Services.AddSwaggerGen(c =>
 {
-  c.SwaggerDoc( "v1", 
+  c.SwaggerDoc("v1",
   new OpenApiInfo
   {
     Title = "Rest API",
@@ -73,11 +82,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-      c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso DotNet - Construindo Restful API's");
-    });
+  app.UseSwagger();
+  app.UseSwaggerUI(c =>
+  {
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso DotNet - Construindo Restful API's");
+  });
 }
 
 var option = new RewriteOptions();
@@ -85,7 +94,7 @@ option.AddRedirect("^$", "swagger");
 app.UseRewriter(option);
 
 app.UseHttpsRedirection();
-
+app.UseCors();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -100,8 +109,8 @@ void MigrateDatabase(string? connection)
     var evolveConnection = new MySqlConnection(connection);
     var evolve = new Evolve(evolveConnection, Log.Information)
     {
-        Locations = new List<string> {"db/migrations", "db/dataset"},
-        IsEraseDisabled = true,
+      Locations = new List<string> { "db/migrations", "db/dataset" },
+      IsEraseDisabled = true,
     };
 
     evolve.Migrate();
