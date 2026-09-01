@@ -22,6 +22,28 @@ public class UserRepository : IUserRepository
     return _context.Users.FirstOrDefault(u => (u.UserName == userVO.UserName) && (u.Password == pass));
   }
 
+  public User RefreshUserInfo(User user)
+  {
+    if (!_context.Users.Any(u => u.Id.Equals(user.Id))) return null;
+
+    var result = _context.Users.SingleOrDefault(p => p.Id.Equals(user.Id));
+    if (result != null)
+    {
+      try
+      {
+        _context.Entry(result).CurrentValues.SetValues(user);
+        _context.SaveChanges();
+      }
+      catch (Exception)
+      {
+
+        throw;
+      }
+    }
+
+    return result;
+  }
+
   private string ComputeHash(string input, SHA256 algorithm)
   {
     Byte[] inputBytes = Encoding.UTF8.GetBytes(input);
