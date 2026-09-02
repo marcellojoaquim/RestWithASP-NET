@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace ApiRestProject.Services;
 
-public interface IToken
+public interface ITokenService
 {
 
   string GenerateAccessToken(IEnumerable<Claim> claims);
