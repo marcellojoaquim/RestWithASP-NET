@@ -5,5 +5,6 @@ namespace ApiRestProject.Repository;
 
 public interface IUserRepository
 {
-  User ValidateCredentions(UserVO userVO);
+  User ValidateCredentials(UserVO userVO);
+  User RefreshUserInfo(User user);
 }

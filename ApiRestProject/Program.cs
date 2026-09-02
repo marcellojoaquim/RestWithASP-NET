@@ -1,12 +1,21 @@
+using System.Text;
 using ApiRestProject.Business;
 using ApiRestProject.Business.Impl;
+using ApiRestProject.Configurations;
 using ApiRestProject.Hypermedia.Enricher;
 using ApiRestProject.Hypermedia.Filters;
 using ApiRestProject.Model.Context;
+using ApiRestProject.Repository;
 using ApiRestProject.Repository.Generic;
+using ApiRestProject.Services;
+using ApiRestProject.Services.Impl;
 using EvolveDb;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using Serilog;
@@ -15,6 +24,34 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
+var tokenConfiguration = new TokenConfiguration();
+var configurationToken = builder.Configuration["TokenConfigurations"];
+
+builder.Services.AddAuthentication(options =>
+{
+  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+  options.TokenValidationParameters = new TokenValidationParameters
+  {
+    ValidateIssuer = true,
+    ValidateAudience = true,
+    ValidateLifetime = true,
+    ValidateIssuerSigningKey = true,
+    ValidIssuer = tokenConfiguration.Issuer,
+    ValidAudience = tokenConfiguration.Audience,
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfiguration.Secret))
+  };
+});
+
+builder.Services.AddAuthorization(auth =>
+{
+  auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+  .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+  .RequireAuthenticatedUser().Build());
+});
 
 builder.Services.AddCors(options =>
 {
@@ -41,9 +78,13 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddApiVersioning();
 //Injecao de dependencia
 builder.Services.AddScoped<IPersonBusiness, PersonBusinessImpl>();
-
 builder.Services.AddScoped<IBookBusiness, BookBusinessImpl>();
+builder.Services.AddScoped<ILoginBusiness, LoginBusinessImpl>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+builder.Services.AddTransient<ITokenService, TokenService>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddMvc(options =>
 {

@@ -16,7 +16,7 @@ public class UserRepository : IUserRepository
     _context = context;
   }
 
-  public User ValidateCredentions(UserVO userVO)
+  public User ValidateCredentials(UserVO userVO)
   {
     var pass = ComputeHash(userVO.Password, SHA256.Create());
     return _context.Users.FirstOrDefault(u => (u.UserName == userVO.UserName) && (u.Password == pass));
