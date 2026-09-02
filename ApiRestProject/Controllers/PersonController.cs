@@ -4,11 +4,13 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using ApiRestProject.Data.VO;
 using ApiRestProject.Hypermedia.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiRestProject.Controllers;
 
 [ApiVersion("1")]
 [ApiController]
+[Authorize("Bearer")]
 [Route("api/[controller]/v{version:apiVersion}")]
 public class PersonController : ControllerBase
 {

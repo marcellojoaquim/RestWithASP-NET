@@ -16,7 +16,7 @@ public class UserRepository : IUserRepository
     _context = context;
   }
 
-  public User ValidateCredentials(UserVO userVO)
+  public User? ValidateCredentials(UserVO userVO)
   {
     var pass = ComputeHash(userVO.Password, SHA256.Create());
     return _context.Users.FirstOrDefault(u => (u.UserName == userVO.UserName) && (u.Password == pass));
@@ -43,11 +43,24 @@ public class UserRepository : IUserRepository
 
     return result;
   }
+  public User? ValidateCredentials(string userName)
+  {
+    return _context.Users.SingleOrDefault(u => u.UserName == userName);
+  }
 
-  private string ComputeHash(string input, SHA256 algorithm)
+  private string ComputeHash(string input, HashAlgorithm algorithm)
   {
     Byte[] inputBytes = Encoding.UTF8.GetBytes(input);
     Byte[] hashedBytes = algorithm.ComputeHash(inputBytes);
-    return BitConverter.ToString(hashedBytes);
+    
+    var builder = new StringBuilder();
+
+    foreach (var item in hashedBytes)
+    {
+      builder.Append(item.ToString("x2"));
+    }
+
+    return builder.ToString();
   }
+
 }

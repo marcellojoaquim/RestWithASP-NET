@@ -25,8 +25,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-var tokenConfiguration = new TokenConfiguration();
+var tokenConfigurations = new TokenConfiguration();
 var configurationToken = builder.Configuration["TokenConfigurations"];
+
+new ConfigureFromConfigurationOptions<TokenConfiguration>(
+  builder.Configuration.GetSection("TokenConfigurations")
+)
+.Configure(tokenConfigurations);
+
+builder.Services.AddSingleton(tokenConfigurations);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -40,9 +47,9 @@ builder.Services.AddAuthentication(options =>
     ValidateAudience = true,
     ValidateLifetime = true,
     ValidateIssuerSigningKey = true,
-    ValidIssuer = tokenConfiguration.Issuer,
-    ValidAudience = tokenConfiguration.Audience,
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfiguration.Secret))
+    ValidIssuer = tokenConfigurations.Issuer,
+    ValidAudience = tokenConfigurations.Audience,
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfigurations.Secret))
   };
 });
 
@@ -136,6 +143,7 @@ app.UseRewriter(option);
 
 app.UseHttpsRedirection();
 app.UseCors();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -52,4 +52,34 @@ public class LoginBusinessImpl : ILoginBusiness
       refreshToken
     );
   }
+
+  public TokenVO ValidateCredentials(TokenVO tokenVO)
+  {
+    var accessToken = tokenVO.AccessToken;
+    var refreshToken = tokenVO.RefreshToken;
+    var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
+    var userName = principal.Identity.Name;
+
+    var user = _repository.ValidateCredentials(userName);
+
+    if(user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now) return null;
+
+    accessToken = _tokenService.GenerateAccessToken(principal.Claims);
+    refreshToken = _tokenService.GenerateRefreshToken();
+
+    user.RefreshToken = refreshToken;
+
+    _repository.RefreshUserInfo(user);
+
+    DateTime createDate = DateTime.Now;
+    DateTime expirationDate = createDate.AddMinutes(_configuration.Minutes);
+
+    return new TokenVO(
+      true,
+      createDate.ToString(DATE_FORMAT),
+      expirationDate.ToString(DATE_FORMAT),
+      accessToken,
+      refreshToken
+    );
+  }
 }
