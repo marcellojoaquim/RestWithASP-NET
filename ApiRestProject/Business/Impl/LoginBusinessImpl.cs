@@ -60,7 +60,7 @@ public class LoginBusinessImpl : ILoginBusiness
     var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
     var userName = principal.Identity.Name;
 
-    var user = _repository.ValidateCredentials(userName);
+    var user = _repository.ValidateCredentials(userName!);
 
     if(user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now) return null;
 
@@ -81,5 +81,10 @@ public class LoginBusinessImpl : ILoginBusiness
       accessToken,
       refreshToken
     );
+  }
+
+  public bool RevokeToken(string userName)
+  {
+    return _repository.RevokeToken(userName);
   }
 }
