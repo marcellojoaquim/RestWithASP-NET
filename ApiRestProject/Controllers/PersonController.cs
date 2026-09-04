@@ -31,7 +31,7 @@ public class PersonController : ControllerBase
     [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Get()
     {
-        _logger.LogInformation("Chamando FindAll()");
+        _logger.LogInformation("Chamando Person FindAll()");
         
         return Ok(_personBusiness.findAll());
     }
@@ -43,7 +43,7 @@ public class PersonController : ControllerBase
     [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Get(long id)
     {
-        _logger.LogInformation("Chamando FindById()");
+        _logger.LogInformation("Chamando Person FindById()");
 
         var person = _personBusiness.FindById(id);
         if(person == null)
@@ -60,7 +60,7 @@ public class PersonController : ControllerBase
     [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Post([FromBody] PersonVO person)
     {
-        _logger.LogInformation("Chamando Create()");
+        _logger.LogInformation("Chamando Person Create()");
 
         if(person == null)
         {
@@ -77,7 +77,7 @@ public class PersonController : ControllerBase
     [TypeFilter(typeof(HyperMediaFilter))]
     public IActionResult Put([FromBody] PersonVO person)
     {
-        _logger.LogInformation("Chamando Update()");
+        _logger.LogInformation("Chamando Person Update()");
 
         if(person == null)
         {
@@ -93,7 +93,7 @@ public class PersonController : ControllerBase
     [ProducesResponseType(404)]
     public IActionResult Delete(long id)
     {
-        _logger.LogInformation("Chamando Delete()");
+        _logger.LogInformation("Chamando Person Delete()");
 
         _personBusiness.Delete(id);
         

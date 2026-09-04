@@ -71,13 +71,13 @@ public class LoginBusinessImpl : ILoginBusiness
 
     _repository.RefreshUserInfo(user);
 
-    DateTime createDate = DateTime.Now;
-    DateTime expirationDate = createDate.AddMinutes(_configuration.Minutes);
+    DateTime created = DateTime.Now;
+    DateTime expiration = created.AddMinutes(_configuration.Minutes);
 
     return new TokenVO(
       true,
-      createDate.ToString(DATE_FORMAT),
-      expirationDate.ToString(DATE_FORMAT),
+      created.ToString(DATE_FORMAT),
+      expiration.ToString(DATE_FORMAT),
       accessToken,
       refreshToken
     );
