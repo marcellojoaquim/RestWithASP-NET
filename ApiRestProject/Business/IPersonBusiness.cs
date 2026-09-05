@@ -1,5 +1,4 @@
 using ApiRestProject.Data.VO;
-using ApiRestProject.Model;
 
 namespace ApiRestProject.Business;
 
@@ -9,5 +8,8 @@ public interface IPersonBusiness
   PersonVO FindById(long id);
   List<PersonVO> findAll();
   PersonVO Update(PersonVO person);
+
+  PersonVO Disable(long id);
+  PersonVO Enable(long id);
   void Delete(long id);
 }

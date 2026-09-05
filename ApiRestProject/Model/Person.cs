@@ -25,4 +25,7 @@ public class Person : BaseEntity
   [Required(ErrorMessage ="Gender é obrigatório")]
   public string Gender {get; set;}
 
+  [Column("enabled")]
+  public bool Enabled {get; set;}
+
 }

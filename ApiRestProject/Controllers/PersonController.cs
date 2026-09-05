@@ -86,6 +86,32 @@ public class PersonController : ControllerBase
         return Ok(_personBusiness.Update(person));
     }
 
+    [HttpPatch("disable/{id}")]
+    [ProducesResponseType(200, Type = typeof(PersonVO))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [TypeFilter(typeof(HyperMediaFilter))]
+    public IActionResult Disable(long id)
+    {
+        _logger.LogInformation("Chamando Person Disabled()");
+
+        var person = _personBusiness.Disable(id);
+        return Ok(person);
+    }
+
+    [HttpPatch("enable/{id}")]
+    [ProducesResponseType(200, Type = typeof(PersonVO))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [TypeFilter(typeof(HyperMediaFilter))]
+    public IActionResult Enable(long id)
+    {
+        _logger.LogInformation("Chamando Person Enable()");
+
+        var person = _personBusiness.Enable(id);
+        return Ok(person);
+    }
+
     [HttpDelete("{id}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]

@@ -15,7 +15,8 @@ public class PersonConverter : IParser<PersonVO, Person>, IParser<Person, Person
       FirstName = origin.FirstName,
       LastName = origin.LastName,
       Adress = origin.Adress,
-      Gender = origin.Gender
+      Gender = origin.Gender,
+      Enabled = origin.Enabled
     };
     
   }
@@ -35,7 +36,8 @@ public class PersonConverter : IParser<PersonVO, Person>, IParser<Person, Person
       FirstName = origin.FirstName,
       LastName = origin.LastName,
       Adress = origin.Adress,
-      Gender = origin.Gender
+      Gender = origin.Gender,
+      Enabled = origin.Enabled
     };
   }
 

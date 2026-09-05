@@ -1,16 +1,17 @@
 using ApiRestProject.Data.Converter.Impl;
 using ApiRestProject.Data.VO;
 using ApiRestProject.Model;
+using ApiRestProject.Repository;
 using ApiRestProject.Repository.Generic;
 
 namespace ApiRestProject.Business.Impl;
 
 public class PersonBusinessImpl : IPersonBusiness
 {
-  private readonly IRepository<Person> _personRepository;
+  private readonly IPersonRepository _personRepository;
   private readonly PersonConverter _converter;
 
-  public PersonBusinessImpl(IRepository<Person> personRepository)
+  public PersonBusinessImpl(IPersonRepository personRepository)
   {
     _personRepository = personRepository;
     _converter = new PersonConverter();
@@ -26,6 +27,18 @@ public class PersonBusinessImpl : IPersonBusiness
   public void Delete(long id)
   {
     _personRepository.Delete(id);
+  }
+
+  public PersonVO Disable(long id)
+  {
+    var person = _personRepository.Disable(id);
+    return _converter.Parse(person);
+  }
+
+  public PersonVO Enable(long id)
+  {
+    var person = _personRepository.Enable(id);
+    return _converter.Parse(person);
   }
 
   public List<PersonVO> findAll()
