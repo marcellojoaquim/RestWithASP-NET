@@ -51,6 +51,11 @@ public class PersonBusinessImpl : IPersonBusiness
     return _converter.Parse(_personRepository.FindById(id));
   }
 
+  public List<PersonVO> FindByName(string? firstName, string? secondName)
+  {
+    return _converter.Parse(_personRepository.FindByName(firstName, secondName));
+  }
+
   public PersonVO Update(PersonVO personVO)
   {
     var p = _converter.Parse(personVO);

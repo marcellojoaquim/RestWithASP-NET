@@ -51,4 +51,24 @@ public class PersonRepository : GenericRepository<Person>, IPersonRepository
     }
     return user;
   }
+
+  public List<Person> FindByName(string? firstName, string? secondName)
+  {
+    if(!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(secondName))
+    {  
+    return _context.People.Where(
+      p => p.FirstName.Contains(firstName) && p.LastName.Contains(secondName)).ToList();
+
+    } else if(string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(secondName))
+    {  
+    return _context.People.Where(
+      p => p.LastName.Contains(secondName)).ToList();
+
+    } else if(!string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(secondName))
+    {  
+    return _context.People.Where(
+      p => p.FirstName.Contains(firstName)).ToList();
+    }
+    return null;
+  }
 }
