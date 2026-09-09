@@ -24,6 +24,7 @@ public class PersonController : ControllerBase
         _personBusiness = personBusiness;
     }
 
+    [Obsolete("This method is deprecated. Use paged instead.", false)]
     [HttpGet]
     [ProducesResponseType(200, Type = typeof(List<PersonVO>))]
     [ProducesResponseType(400)]
@@ -35,6 +36,19 @@ public class PersonController : ControllerBase
         
         return Ok(_personBusiness.findAll());
     }
+
+    [HttpGet("findPeapleWithParams/{sortDirection}/{pageSize}/{page}")]
+    [ProducesResponseType(200, Type = typeof(List<PersonVO>))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [TypeFilter(typeof(HyperMediaFilter))]
+    public IActionResult GetPeapleWithQueryParams([FromQuery] string name, string sortDirection, int pageSize, int page)
+    {
+        _logger.LogInformation("Chamando Peaple FindWithQueryParam()");
+        
+        return Ok(_personBusiness.FindWithPagedSearch(name, sortDirection, pageSize, page));
+    }
+
 
     [HttpGet("{id}")]
     [ProducesResponseType(200, Type = typeof(PersonVO))]

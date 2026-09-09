@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Net.Mime;
 using ApiRestProject.Hypermedia.Abstract;
+using ApiRestProject.Hypermedia.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -13,7 +14,7 @@ public abstract class ContentResponseEnricher<T> : IResponseEnricher where T : I
   public ContentResponseEnricher() { }
   public bool CanEnrich(Type contentType)
   {
-    return contentType == typeof(T) || contentType == typeof(List<T>);
+    return contentType == typeof(T) || contentType == typeof(List<T>) || contentType == typeof(PagedSearchVO<T>);
   }
 
   protected abstract Task EnrichModel(T content, IUrlHelper urlHelper);
@@ -40,6 +41,12 @@ public abstract class ContentResponseEnricher<T> : IResponseEnricher where T : I
       {
         ConcurrentBag<T> bag = new ConcurrentBag<T>(collection);
         Parallel.ForEach(bag, (element) =>
+        {
+          EnrichModel(element, urlHelper);
+        });
+      } else if (okObjectResult.Value is PagedSearchVO<T> pagedSearch)
+      {
+        Parallel.ForEach(pagedSearch.List.ToList(), (element) =>
         {
           EnrichModel(element, urlHelper);
         });
