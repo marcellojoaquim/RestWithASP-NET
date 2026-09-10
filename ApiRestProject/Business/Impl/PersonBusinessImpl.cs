@@ -58,7 +58,7 @@ public class PersonBusinessImpl : IPersonBusiness
     return _converter.Parse(_personRepository.FindByName(firstName, secondName));
   }
 
-  public PagedSearchVO<PersonVO> FindWithPagedSearch(string name, string sortDirection, int pageSize, int currentPage)
+  public PagedSearchVO<PersonVO> FindWithPagedSearch(string? name, string sortDirection, int pageSize, int currentPage)
   {
     var sort = (!string.IsNullOrWhiteSpace(sortDirection)) && !sortDirection.Equals("desc") ? "asc" : "desc";
     var size = (pageSize < 1) ? 10 : pageSize;
@@ -68,7 +68,7 @@ public class PersonBusinessImpl : IPersonBusiness
     
     if(!string.IsNullOrWhiteSpace(name)) query = query + $" AND p.firstName like '%{name}%'";
     
-    query += $"ORDER BY p.firstName {sort} LIMIT {size} OFFSET {offset}";
+    query += $" ORDER BY p.firstName {sort} LIMIT {size} OFFSET {offset}";
 
     string countQuery = @"SELECT COUNT(*) FROM person p WHERE 1 = 1";
     if(!string.IsNullOrWhiteSpace(name)) countQuery = countQuery + $" AND p.firstName like '%{name}%'";

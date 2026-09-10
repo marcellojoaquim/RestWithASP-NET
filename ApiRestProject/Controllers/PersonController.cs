@@ -42,7 +42,7 @@ public class PersonController : ControllerBase
     [ProducesResponseType(400)]
     [ProducesResponseType(401)]
     [TypeFilter(typeof(HyperMediaFilter))]
-    public IActionResult GetPeapleWithQueryParams([FromQuery] string name, string sortDirection, int pageSize, int page)
+    public IActionResult GetPeapleWithQueryParams([FromQuery] string? name, string sortDirection, int pageSize, int page)
     {
         _logger.LogInformation("Chamando Peaple FindWithQueryParam()");
         
