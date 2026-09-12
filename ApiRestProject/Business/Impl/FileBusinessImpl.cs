@@ -16,7 +16,8 @@ public class FileBusinessImpl : IFileBusiness
   
   public byte[] GetFile(string fileName)
   {
-    throw new NotImplementedException();
+    var filePath = _basePath + "/"+ fileName;
+    return File.ReadAllBytes(filePath);
   }
 
   public async Task<FileDetailVO> SaveFileToDisk(IFormFile file)
@@ -25,7 +26,7 @@ public class FileBusinessImpl : IFileBusiness
     var fileType = Path.GetExtension(file.FileName);
     var baseUrl = _context.HttpContext.Request.Host;
     var allowedExtentions = new[] {".pdf", ".jpg", ".png", ".jpeg"};
-    
+
     if(allowedExtentions.Contains(fileType.ToLower()))
     {
       var docName = Path.GetFileName(file.FileName);
@@ -44,9 +45,14 @@ public class FileBusinessImpl : IFileBusiness
     return fileDetail;
   }
 
-  public Task<List<FileDetailVO>> SaveFilesToDisk(IList<IFormFile> files)
+  public async Task<List<FileDetailVO>> SaveFilesToDisk(IList<IFormFile> files)
   {
-    throw new NotImplementedException();
+    List<FileDetailVO> list = new List<FileDetailVO>();
+    foreach (var file in files)
+    {
+      list.Add(await SaveFileToDisk(file));
+    } 
+    return list;
   }
 
 }
